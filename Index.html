@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Copa eFootball - Inscrição</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: url('wallpaper.jpg') center center / cover no-repeat fixed #1a0d8c;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  h1 {
+    text-align: center;
+    color: #1a0d8c;
+    margin-bottom: 25px;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+  input, select, button {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    margin-bottom: 18px;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  input { cursor: text; }
+  input:focus, select:focus { outline: none; border-color: #1a0d8c; }
+  select:disabled { background: #f0f0f0; cursor: not-allowed; }
+  button {
+    background: #1a0d8c;
+    color: #fff;
+    border: none;
+    font-weight: 700;
+  }
+  button:hover:not(:disabled) { background: #120963; }
+  button:disabled { background: #aaa; cursor: not-allowed; }
+  .btn-wpp { background: #25D366; }
+  .btn-wpp:hover:not(:disabled) { background: #1da851; }
+  .btn-admin {
+    background: #f0f0f0;
+    color: #333;
+    font-size: 14px;
+    padding: 8px;
+    margin-top: 10px;
+  }
+  .btn-admin:hover { background: #ddd; }
+  .resultado {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e8f0fe;
+    border-left: 4px solid #1a0d8c;
+    border-radius: 6px;
+    display: none;
+  }
+  .resultado.show { display: block; }
+  optgroup { font-weight: bold; color: #1a0d8c; }
+
+  .admin-panel {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff8e1;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .admin-panel.show { display: block; }
+  .admin-panel h3 { color: #1a0d8c; margin-bottom: 12px; }
+  .inscrito {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border-left: 3px solid #1a0d8c;
+    font-size: 14px;
+  }
+  .inscrito small { color: #666; }
+  .btn-limpar {
+    background: #d9534f;
+    color: #fff;
+    padding: 8px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .btn-limpar:hover { background: #b52b27; }
+  .vazio { text-align: center; color: #888; padding: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚽ Copa eFootball - Inscrição</h1>
+
+  <label for="nome">Nome do participante</label>
+  <input type="text" id="nome" placeholder="Digite seu nome (não precisa ser completo)" maxlength="40">
+
+  <label for="liga">Liga / Competição</label>
+  <select id="liga">
+    <option value="">-- Selecione uma liga --</option>
+    <optgroup label="🇪🇺 Europa">
+      <option value="scottish">Scottish Premiership</option>
+      <option value="dinamarquesa">Liga dinamarquesa</option>
+      <option value="eredivisie">VriendenLoterij Eredivisie</option>
+      <option value="inglesa">Liga inglesa</option>
+      <option value="inglesa2">2ª divisão inglesa</option>
+      <option value="belga">Liga belga</option>
+      <option value="ligue1">Ligue 1 McDonald's</option>
+      <option value="ligue2">Ligue 2 BKT</option>
+      <option value="suica">Liga suíça</option>
+      <option value="italiana">Liga italiana</option>
+      <option value="italiana2">2ª divisão italiana</option>
+      <option value="espanhola">Liga espanhola</option>
+      <option value="espanhola2">2ª divisão espanhola</option>
+      <option value="turca">Trendyol Süper Lig</option>
+      <option value="portugal">Liga Portugal Betclic</option>
+      <option value="outros_eu">Outros (Europa)</option>
+      <option value="selecoes_eu">Seleções (Europa)</option>
+    </optgroup>
+    <optgroup label="🌎 América do Sul">
+      <option value="colombiana">Liga colombiana</option>
+      <option value="brasileirao">Brasileirão Betano</option>
+      <option value="brasileira2">2ª divisão brasileira</option>
+      <option value="chilena">Liga chilena</option>
+      <option value="argentina">Liga argentina</option>
+      <option value="outros_sa">Outros (América do Sul)</option>
+    </optgroup>
+    <optgroup label="🇺🇸 América do Norte">
+      <option value="mls">Liga dos EUA</option>
+      <option value="usl">USL Championship</option>
+      <option value="outros_na">Outros (América do Norte)</option>
+      <option value="selecoes_na">Seleções (América do Norte)</option>
+    </optgroup>
+    <optgroup label="🌏 Ásia">
+      <option value="coreana">Liga coreana</option>
+      <option value="j1">MEIJI YASUDA J1 LEAGUE</option>
+      <option value="j2">MEIJI YASUDA J2 LEAGUE</option>
+      <option value="byd">BYD SEALION 6 LEAGUE 1</option>
+      <option value="malaysia">Liga Super Malaysia</option>
+      <option value="outros_as">Outros (Ásia)</option>
+      <option value="afc_elite">AFC Champions League Elite™</option>
+      <option value="afc_two">AFC Champions League Two™</option>
+    </optgroup>
+  </select>
+
+  <label for="clube">Clube</label>
+  <select id="clube" disabled>
+    <option value="">-- Selecione primeiro uma liga --</option>
+  </select>
+
+  <button id="enviarWpp" class="btn-wpp" disabled>📱 Enviar inscrição pelo WhatsApp</button>
+
+  <div class="resultado" id="resultado"></div>
+
+  <button id="verAdmin" class="btn-admin">🔒 Ver inscrições (admin)</button>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>📋 Inscrições recebidas</h3>
+    <div id="listaInscritos"></div>
+    <button id="exportar" class="btn-admin">📥 Exportar como texto</button>
+    <button id="limpar" class="btn-limpar">🗑️ Limpar todas inscrições</button>
+  </div>
+</div>
+
+<script>
+const SEU_WHATSAPP = "5599991197291";
+const SENHA_ADMIN = "1914";
+
+const clubes = {
+  scottish: ["Celtic", "Rangers", "Aberdeen", "Hearts", "Hibernian", "Motherwell"],
+  dinamarquesa: ["FC Copenhagen", "Brøndby", "Midtjylland", "AGF Aarhus", "Nordsjælland"],
+  eredivisie: ["Ajax", "PSV", "Feyenoord", "AZ Alkmaar", "Twente", "Utrecht"],
+  inglesa: ["Manchester City", "Manchester United", "Liverpool", "Chelsea", "Arsenal", "Tottenham", "Newcastle"],
+  inglesa2: ["Leeds United", "Leicester City", "Southampton", "Norwich City", "Sunderland"],
+  belga: ["Club Brugge", "Anderlecht", "Genk", "Standard Liège", "Antwerp"],
+  ligue1: ["PSG", "Marseille", "Lyon", "Monaco", "Lille", "Rennes", "Nice"],
+  ligue2: ["Saint-Étienne", "Bordeaux", "Caen", "Guingamp", "Bastia"],
+  suica: ["Young Boys", "Basel", "Zürich", "Servette", "Lugano"],
+  italiana: ["Inter de Milão", "Milan", "Juventus", "Napoli", "Roma", "Lazio", "Atalanta"],
+  italiana2: ["Sampdoria", "Palermo", "Parma", "Bari", "Venezia"],
+  espanhola: ["Real Madrid", "Barcelona", "Atlético de Madrid", "Sevilla", "Valencia", "Real Sociedad", "Athletic Bilbao"],
+  espanhola2: ["Sporting Gijón", "Real Oviedo", "Eibar", "Levante", "Albacete"],
+  turca: ["Galatasaray", "Fenerbahçe", "Beşiktaş", "Trabzonspor", "Başakşehir"],
+  portugal: ["Benfica", "Porto", "Sporting CP", "Braga", "Vitória SC", "Boavista"],
+  outros_eu: ["Outro clube europeu"],
+  selecoes_eu: ["Portugal", "Espanha", "França", "Alemanha", "Itália", "Inglaterra", "Holanda", "Bélgica"],
+  colombiana: ["Atlético Nacional", "Millonarios", "América de Cali", "Junior", "Independiente Medellín"],
+  brasileirao: ["Flamengo", "Palmeiras", "São Paulo", "Corinthians", "Fluminense", "Botafogo", "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro", "Vasco", "Santos"],
+  brasileira2: ["Sport", "Santos", "Goiás", "Coritiba", "Avaí", "Novorizontino"],
+  chilena: ["Colo-Colo", "Universidad de Chile", "Universidad Católica", "Cobreloa"],
+  argentina: ["Boca Juniors", "River Plate", "Racing", "Independiente", "San Lorenzo", "Estudiantes"],
+  outros_sa: ["Outro clube sul-americano"],
+  mls: ["Inter Miami", "LA Galaxy", "LAFC", "Atlanta United", "Seattle Sounders", "NYCFC"],
+  usl: ["Sacramento Republic", "Phoenix Rising", "Indy Eleven", "Louisville City"],
+  outros_na: ["Outro clube norte-americano"],
+  selecoes_na: ["Estados Unidos", "México", "Canadá", "Costa Rica"],
+  coreana: ["Ulsan Hyundai", "Jeonbuk", "FC Seoul", "Pohang Steelers"],
+  j1: ["Vissel Kobe", "Yokohama F. Marinos", "Kawasaki Frontale", "Urawa Reds", "Kashima Antlers"],
+  j2: ["Shimizu S-Pulse", "JEF United", "V-Varen Nagasaki", "Tokushima Vortis", "Blaublitz Akita"],
+  byd: ["Shanghai Port", "Shanghai Shenhua", "Beijing Guoan", "Shandong Taishan"],
+  malaysia: ["Johor Darul Ta'zim", "Selangor", "Kuala Lumpur City", "Sabah"],
+  outros_as: ["Outro clube asiático"],
+  afc_elite: ["Al-Hilal", "Al-Ain", "Yokohama F. Marinos", "Ulsan HD"],
+  afc_two: ["Sharjah FC", "Lion City Sailors", "Tampines Rovers"]
+};
+
+const nomeInput = document.getElementById('nome');
+const ligaSel = document.getElementById('liga');
+const clubeSel = document.getElementById('clube');
+const btnWpp = document.getElementById('enviarWpp');
+const resultado = document.getElementById('resultado');
+const verAdmin = document.getElementById('verAdmin');
+const adminPanel = document.getElementById('adminPanel');
+const listaInscritos = document.getElementById('listaInscritos');
+const btnLimpar = document.getElementById('limpar');
+const btnExportar = document.getElementById('exportar');
+
+function validarFormulario() {
+  const nomeOk = nomeInput.value.trim().length >= 2;
+  const ligaOk = ligaSel.value !== '';
+  const clubeOk = clubeSel.value !== '';
+  btnWpp.disabled = !(nomeOk && ligaOk && clubeOk);
+}
+
+nomeInput.addEventListener('input', validarFormulario);
+
+ligaSel.addEventListener('change', () => {
+  const valor = ligaSel.value;
+  clubeSel.innerHTML = '';
+  resultado.classList.remove('show');
+
+  if (!valor) {
+    clubeSel.disabled = true;
+    clubeSel.innerHTML = '<option value="">-- Selecione primeiro uma liga --</option>';
+    validarFormulario();
+    return;
+  }
+
+  clubeSel.disabled = false;
+  clubeSel.innerHTML = '<option value="">-- Selecione um clube --</option>';
+  clubes[valor].forEach(clube => {
+    const opt = document.createElement('option');
+    opt.value = clube;
+    opt.textContent = clube;
+    clubeSel.appendChild(opt);
+  });
+  validarFormulario();
+});
+
+clubeSel.addEventListener('change', validarFormulario);
+
+function salvarInscricao(nome, liga, clube) {
+  const inscricoes = JSON.parse(localStorage.getItem('inscricoes') || '[]');
+  inscricoes.push({ nome, liga, clube, data: new Date().toLocaleString('pt-BR') });
+  localStorage.setItem('inscricoes', JSON.stringify(inscricoes));
+}
+
+btnWpp.addEventListener('click', () => {
+  const nome = nomeInput.value.trim();
+  const ligaTexto = ligaSel.options[ligaSel.selectedIndex].text;
+  const clubeTexto = clubeSel.value;
+
+  salvarInscricao(nome, ligaTexto, clubeTexto);
+
+  const mensagem = `*🆕 Nova inscrição - Copa eFootball!*%0A%0A` +
+                   `👤 *Nome:* ${nome}%0A` +
+                   `🏆 *Liga:* ${ligaTexto}%0A` +
+                   `⚽ *Clube:* ${clubeTexto}`;
+
+  const url = `https://wa.me/${SEU_WHATSAPP}?text=${mensagem}`;
+  window.open(url, '_blank');
+
+  resultado.innerHTML = `
+    ✅ <strong>Inscrição enviada!</strong><br><br>
+    👤 Participante: <strong>${nome}</strong><br>
+    🏆 Liga: <strong>${ligaTexto}</strong><br>
+    ⚽ Clube: <strong>${clubeTexto}</strong><br><br>
+    📱 <em>Confirme o envio no WhatsApp que abriu.</em>
+  `;
+  resultado.classList.add('show');
+});
+
+verAdmin.addEventListener('click', () => {
+  if (adminPanel.classList.contains('show')) {
+    adminPanel.classList.remove('show');
+    return;
+  }
+  const senha = prompt('Digite a senha de admin:');
+  if (senha === SENHA_ADMIN) {
+    mostrarInscricoes();
+    adminPanel.classList.add('show');
+  } else if (senha !== null) {
+    alert('❌ Senha incorreta!');
+  }
+});
+
+function mostrarInscricoes() {
+  const inscricoes = JSON.parse(localStorage.getItem('inscricoes') || '[]');
+  if (inscricoes.length === 0) {
+    listaInscritos.innerHTML = '<div class="vazio">Nenhuma inscrição ainda.</div>';
+    return;
+  }
+  listaInscritos.innerHTML = inscricoes.map((i, idx) => `
+    <div class="inscrito">
+      <strong>#${idx + 1} - ${i.nome}</strong><br>
+      🏆 ${i.liga}<br>
+      ⚽ ${i.clube}<br>
+      <small>📅 ${i.data}</small>
+    </div>
+  `).join('');
+}
+
+btnLimpar.addEventListener('click', () => {
+  if (confirm('Tem certeza que deseja apagar TODAS as inscrições?')) {
+    localStorage.removeItem('inscricoes');
+    mostrarInscricoes();
+  }
+});
+
+btnExportar.addEventListener('click', () => {
+  const inscricoes = JSON.parse(localStorage.getItem('inscricoes') || '[]');
+  if (inscricoes.length === 0) { alert('Nenhuma inscrição para exportar.'); return; }
+  let texto = '📋 LISTA DE INSCRIÇÕES - COPA eFOOTBALL\n\n';
+  inscricoes.forEach((i, idx) => {
+    texto += `#${idx + 1}\nNome: ${i.nome}\nLiga: ${i.liga}\nClube: ${i.clube}\nData: ${i.data}\n\n`;
+  });
+  const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'inscricoes-copa-efootball.txt';
+  link.click();
+});
+</script>
+</body>
+  </html>
