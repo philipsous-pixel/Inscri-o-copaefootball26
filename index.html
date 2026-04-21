@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copa eFootball - Philipsous</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --darker: #020617;
+      --glass: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.1);
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--darker);
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background animado */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 50%, rgba(6,182,212,0.1) 0%, transparent 70%),
+        linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%);
+    }
+
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      backdrop-filter: blur(80px);
+      -webkit-backdrop-filter: blur(80px);
+    }
+
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(99,102,241,0.4);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+    }
+
+    /* Header */
+    header {
+      background: rgba(15,23,42,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+
+    .logo span { font-size: 0.9rem; font-weight: 400; display: block; letter-spacing: 4px; opacity: 0.8; }
+
+    .social-links { display: flex; gap: 1rem; align-items: center; }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #e2e8f0;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .social-links a:hover {
+      background: rgba(236,72,153,0.15);
+      border-color: rgba(236,72,153,0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(236,72,153,0.2);
+    }
+
+    .admin-btn {
+      background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2)) !important;
+      border-color: rgba(99,102,241,0.3) !important;
+      cursor: pointer;
+    }
+
+    .admin-btn:hover {
+      background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(139,92,246,0.4)) !important;
+      box-shadow: 0 8px 25px rgba(99,102,241,0.3) !important;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 3px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.4s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(99,102,241,0.3);
+      box-shadow: 0 20px 60px rgba(99,102,241,0.1);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Vagas */
+    .vagas-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .vagas-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: all 0.8s ease;
+      background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+      background-size: 200% 100%;
+    }
+
+    .vagas-text {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .vagas-text span { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; }
+
+    /* Form */
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      background: rgba(15,23,42,0.6);
+      color: #e2e8f0;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+
+    .form-group select option { background: #0f172a; color: #e2e8f0; }
+
+    .form-group select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+    }
+
+    .error-msg.show { display: flex; }
+
+    /* Botões */
+    .btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      border: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 8px 30px rgba(99,102,241,0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(99,102,241,0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-danger {
+      background: rgba(239,68,68,0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239,68,68,0.3);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      width: auto;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239,68,68,0.3);
+    }
+
+    /* Regras */
+    .regras-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .regras-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border-left: 3px solid var(--primary);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .regras-list li .num {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      color: var(--accent);
+      min-width: 24px;
+    }
+
+    /* Modal Admin */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: white; }
+
+    .modal h2 {
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .senha-input {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .senha-input input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(15,23,42,0.6);
+      color: #e2e8f0;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .senha-input input:focus { border-color: var(--primary); }
+
+    .senha-input button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .senha-input button:hover { transform: translateY(-2px); }
+
+    /* Tabela inscritos */
+    .inscritos-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .inscritos-table th,
+    .inscritos-table td {
+      padding: 0.875rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .inscritos-table th {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    .inscritos-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #64748b;
+    }
+
+    .empty-state svg { margin-bottom: 1rem; opacity: 0.5; }
+
+    /* Animação Sucesso */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.92);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .success-overlay.active { display: flex; }
+
+    .trophy {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      animation: bounce 1s ease infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-20px) scale(1.1); }
+    }
+
+    .success-overlay h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .success-overlay p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      max-width: 500px;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      animation: confetti-fall 3s ease-out forwards;
+      z-index: 2001;
+      pointer-events: none;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* WhatsApp note */
+    .whatsapp-note {
+      text-align: center;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #475569;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--glass-border);
+      margin-top: 2rem;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .header-content { flex-direction: column; text-align: center; }
+      .card { padding: 1.5rem; }
+      .inscritos-table { font-size: 0.85rem; }
+      .inscritos-table th, .inscritos-table td { padding: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="bg-blur"></div>
+  <div class="particles" id="particles"></div>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">COPA EFOOTBALL <span>BY PHILIPSOUS</span></div>
+      <div class="social-links">
+        <a href="https://www.instagram.com/philipsous?igsh=MTZ3czR4OXVpdDhnaQ==" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          @philipsous
+        </a>
+        <button class="admin-btn" onclick="openAdmin()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+          Painel Admin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h1>COPA EFOOTBALL</h1>
+      <p>Inscreva-se e garanta sua vaga no torneio!</p>
+    </section>
+
+    <!-- Vagas -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+        Vagas Disponíveis
+      </div>
+      <div class="vagas-bar"><div class="vagas-fill" id="vagasFill" style="width:0%"></div></div>
+      <div class="vagas-text"><span id="vagasCount">0</span> / 20 clubes inscritos</div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Inscrição
+      </div>
+      <form id="formInscricao" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label for="nome">Nome do Jogador</label>
+          <input type="text" id="nome" placeholder="Digite seu nome" required maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label for="liga">Liga</label>
+          <select id="liga" onchange="atualizarClubes()" required>
+            <option value="">Selecione uma liga</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="clube">Clube</label>
+          <select id="clube" disabled required>
+            <option value="">Selecione um clube</option>
+          </select>
+          <div class="error-msg" id="erroClube">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Erro, este clube já está em uso
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnSubmit">Confirmar Inscrição</button>
+        <div class="whatsapp-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          A confirmação será enviada automaticamente ao organizador
+        </div>
+      </form>
+    </div>
+
+    <!-- Regras -->
+    <div class="card">
+      <div class="card-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Regras da Copa
+      </div>
+      <ul class="regras-list">
+        <li><span class="num">1.</span> Não pode ter o mesmo escudo do time adversário.</li>
+        <li><span class="num">2.</span> Não pode quitar durante a partida.</li>
+        <li><span class="num">3.</span> Prints do resultado (final de partida).</li>
+        <li><span class="num">4.</span> Se o usuário estiver com problema de internet, a partida pode ser adiada.</li>
+        <li><span class="num">5.</span> A fase de eliminação só vai funcionar se todos os membros classificados estiverem todos prontos.</li>
+        <li><span class="num">6.</span> A partida da COPA é duração de 15 minutos.</li>
+        <li><span class="num">7.</span> Todas as partidas da COPA tem 6 substituições.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    Copa eFootball by Philipsous - Todos os direitos reservados
+  </footer>
+
+  <!-- Modal Admin -->
+  <div class="modal-overlay" id="modalAdmin">
+    <div class="modal">
+      <button class="modal-close" onclick="closeAdmin()">&times;</button>
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3
