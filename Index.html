@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa eFootball - Inscrição</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    background: #1a0d8c;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,80,120,0.5) 0%, transparent 25%),
+      radial-gradient(circle at 80% 30%, rgba(80,220,150,0.5) 0%, transparent 25%),
+      radial-gradient(circle at 15% 75%, rgba(255,180,80,0.4) 0%, transparent 25%),
+      radial-gradient(circle at 85% 80%, rgba(120,80,255,0.5) 0%, transparent 25%),
+      radial-gradient(circle at 50% 50%, rgba(26,13,140,1) 0%, rgba(20,10,100,1) 100%);
+    background-attachment: fixed;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    margin: 20px 0;
+  }
+  h1 {
+    text-align: center;
+    color: #1a0d8c;
+    margin-bottom: 10px;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .status {
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #888;
+    cursor: pointer;
+  }
+  .status.online { background: #25D366; }
+  .status.offline { background: #d9534f; }
+  label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+  input[type="text"], select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    margin-bottom: 18px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a0d8c'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 40px;
+  }
+  input:focus, select:focus { outline: none; border-color: #1a0d8c; }
+  select:disabled { background-color: #f0f0f0; color: #999; cursor: not-allowed; }
+  button {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 18px;
+    cursor: pointer;
+    font-family: inherit;
+    background: #1a0d8c;
+    color: #fff;
+    font-weight: 700;
+  }
+  button:hover:not(:disabled) { background: #120963; }
+  button:disabled { background: #aaa; cursor: not-allowed; }
+  .btn-wpp { background: #25D366; }
+  .btn-admin { background: #f0f0f0; color: #333; font-size: 14px; padding: 8px; margin-top: 10px; }
+  .resultado {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e8f0fe;
+    border-left: 4px solid #1a0d8c;
+    border-radius: 6px;
+    display: none;
+  }
+  .resultado.show { display: block; }
+  .resultado.erro { background: #fde8e8; border-left-color: #d9534f; color: #721c24; }
+  optgroup { font-weight: bold; color: #1a0d8c; }
+  .vagas-info {
+    font-size: 13px;
+    color: #1a0d8c;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    padding: 8px 10px;
+    background: #e8f0fe;
+    border-radius: 5px;
+    display: none;
+  }
+  .vagas-info.show { display: block; }
+  .vagas-info.cheio { background: #fde8e8; color: #d9534f; }
+  .admin-panel {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff8e1;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .admin-panel.show { display: block; }
+  .admin-panel h3 { color: #1a0d8c; margin-bottom: 12px; }
+  .inscrito {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border-left: 3px solid #1a0d8c;
+    font-size: 14px;
+    position: relative;
+  }
+  .inscrito small { color: #666; }
+  .btn-excluir {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    width: auto;
+    margin: 0;
+  }
+  .btn-limpar { background: #d9534f; color: #fff; padding: 8px; font-size: 13px; margin-top: 10px; }
+  .vazio { text-align: center; color: #888; padding: 20px; }
+  #debug {
+    background: #f0f0f0;
+    color: #333;
+    padding: 10px;
+    font-size: 11px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-family: monospace;
+    word-wrap: break-word;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚽ Copa eFootball - Inscrição</h1>
+  <div class="status" id="statusConexao" onclick="location.reload()">⏳ Conectando ao servidor... (toque para recarregar)</div>
+  <div id="debug">📋 Log: Iniciando...</div>
+
+  <label for="nome">Nome do participante</label>
+  <input type="text" id="nome" placeholder="Digite seu nome (não precisa ser completo)" maxlength="40" autocomplete="off">
+
+  <label for="liga">Liga / Competição</label>
+  <select id="liga">
+    <option value="">-- Selecione uma liga --</option>
+    <optgroup label="🇪🇺 Europa">
+      <option value="scottish">Scottish Premiership</option>
+      <option value="dinamarquesa">Liga dinamarquesa</option>
+      <option value="eredivisie">VriendenLoterij Eredivisie</option>
+      <option value="inglesa">Liga inglesa</option>
+      <option value="inglesa2">2ª divisão inglesa</option>
+      <option value="belga">Liga belga</option>
+      <option value="ligue1">Ligue 1 McDonald's</option>
+      <option value="ligue2">Ligue 2 BKT</option>
+      <option value="suica">Liga suíça</option>
+      <option value="italiana">Liga italiana</option>
+      <option value="italiana2">2ª divisão italiana</option>
+      <option value="espanhola">Liga espanhola</option>
+      <option value="espanhola2">2ª divisão espanhola</option>
+      <option value="turca">Trendyol Süper Lig</option>
+      <option value="portugal">Liga Portugal Betclic</option>
+      <option value="outros_eu">Outros (Europa)</option>
+      <option value="selecoes_eu">Seleções (Europa)</option>
+    </optgroup>
+    <optgroup label="🌎 América do Sul">
+      <option value="colombiana">Liga colombiana</option>
+      <option value="brasileirao">Brasileirão Betano</option>
+      <option value="brasileira2">2ª divisão brasileira</option>
+      <option value="chilena">Liga chilena</option>
+      <option value="argentina">Liga argentina</option>
+      <option value="outros_sa">Outros (América do Sul)</option>
+    </optgroup>
+    <optgroup label="🇺🇸 América do Norte">
+      <option value="mls">Liga dos EUA</option>
+      <option value="usl">USL Championship</option>
+      <option value="outros_na">Outros (América do Norte)</option>
+      <option value="selecoes_na">Seleções (América do Norte)</option>
+    </optgroup>
+    <optgroup label="🌏 Ásia">
+      <option value="coreana">Liga coreana</option>
+      <option value="j1">MEIJI YASUDA J1 LEAGUE</option>
+      <option value="j2">MEIJI YASUDA J2 LEAGUE</option>
+      <option value="byd">BYD SEALION 6 LEAGUE 1</option>
+      <option value="malaysia">Liga Super Malaysia</option>
+      <option value="outros_as">Outros (Ásia)</option>
+      <option value="afc_elite">AFC Champions League Elite™</option>
+      <option value="afc_two">AFC Champions League Two™</option>
+    </optgroup>
+  </select>
+
+  <label for="clube">Clube</label>
+  <select id="clube" disabled>
+    <option value="">-- Selecione primeiro uma liga --</option>
+  </select>
+  <div class="vagas-info" id="vagasInfo"></div>
+
+  <button id="enviarWpp" class="btn-wpp" disabled>📱 Enviar inscrição pelo WhatsApp</button>
+
+  <div class="resultado" id="resultado"></div>
+
+  <button id="verAdmin" class="btn-admin">🔒 Ver inscrições (admin)</button>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>📋 Inscrições recebidas</h3>
+    <div id="listaInscritos"><div class="vazio">Carregando...</div></div>
+    <button id="exportar" class="btn-admin">📥 Exportar como texto</button>
+    <button id="limpar" class="btn-limpar">🗑️ Limpar TODAS as inscrições</button>
+  </div>
+</div>
+
+<script>
+function log(msg) {
+  const dbg = document.getElementById('debug');
+  dbg.innerHTML += '<br>' + new Date().toLocaleTimeString() + ' - ' + msg;
+  console.log(msg);
+}
+
+log('Página carregada. Tentando carregar Firebase...');
+
+// Define timeout
+let firebaseLoaded = false;
+setTimeout(() => {
+  if (!firebaseLoaded) {
+    log('❌ TIMEOUT! Firebase não carregou em 10 segundos.');
+    document.getElementById('statusConexao').textContent = '🔴 Firebase BLOQUEADO! Tente outro navegador (Chrome/Firefox)';
+    document.getElementById('statusConexao').className = 'status offline';
+  }
+}, 10000);
+
+// Carrega Firebase via script
+function carregarScript(url, callback) {
+  log('Carregando: ' + url);
+  const s = document.createElement('script');
+  s.src = url;
+  s.onload = () => { log('✅ Carregado: ' + url.split('/').pop()); callback(); };
+  s.onerror = () => {
+    log('❌ ERRO ao carregar: ' + url);
+    document.getElementById('statusConexao').textContent = '🔴 Bloqueado pelo navegador! Use Chrome/Firefox.';
+    document.getElementById('statusConexao').className = 'status offline';
+  };
+  document.head.appendChild(s);
+}
+
+carregarScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js', () => {
+  carregarScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js', () => {
+    firebaseLoaded = true;
+    iniciarApp();
+  });
+});
+
+const SEU_WHATSAPP = "5599991197291";
+const SENHA_ADMIN = "1914";
+const LIMITE_POR_CLUBE = 20;
+
+const clubes = {
+  scottish: ["Celtic", "Rangers", "Aberdeen", "Hearts", "Hibernian", "Motherwell"],
+  dinamarquesa: ["FC Copenhagen", "Brøndby", "Midtjylland", "AGF Aarhus", "Nordsjælland"],
+  eredivisie: ["Ajax", "PSV", "Feyenoord", "AZ Alkmaar", "Twente", "Utrecht"],
+  inglesa: ["Manchester City", "Manchester United", "Liverpool", "Chelsea", "Arsenal", "Tottenham", "Newcastle"],
+  inglesa2: ["Leeds United", "Leicester City", "Southampton", "Norwich City", "Sunderland"],
+  belga: ["Club Brugge", "Anderlecht", "Genk", "Standard Liège", "Antwerp"],
+  ligue1: ["PSG", "Marseille", "Lyon", "Monaco", "Lille", "Rennes", "Nice"],
+  ligue2: ["Saint-Étienne", "Bordeaux", "Caen", "Guingamp", "Bastia"],
+  suica: ["Young Boys", "Basel", "Zürich", "Servette", "Lugano"],
+  italiana: ["Inter de Milão", "Milan", "Juventus", "Napoli", "Roma", "Lazio", "Atalanta"],
+  italiana2: ["Sampdoria", "Palermo", "Parma", "Bari", "Venezia"],
+  espanhola: ["Real Madrid", "Barcelona", "Atlético de Madrid", "Sevilla", "Valencia", "Real Sociedad", "Athletic Bilbao"],
+  espanhola2: ["Sporting Gijón", "Real Oviedo", "Eibar", "Levante", "Albacete"],
+  turca: ["Galatasaray", "Fenerbahçe", "Beşiktaş", "Trabzonspor", "Başakşehir"],
+  portugal: ["Benfica", "Porto", "Sporting CP", "Braga", "Vitória SC", "Boavista"],
+  outros_eu: ["Outro clube europeu"],
+  selecoes_eu: ["Portugal", "Espanha", "França", "Alemanha", "Itália", "Inglaterra", "Holanda", "Bélgica"],
+  colombiana: ["Atlético Nacional", "Millonarios", "América de Cali", "Junior", "Independiente Medellín"],
+  brasileirao: ["Flamengo", "Palmeiras", "São Paulo", "Corinthians", "Fluminense", "Botafogo", "Grêmio", "Internacional", "Atlético-MG", "Cruzeiro", "Vasco", "Santos", "Red Bull Bragantino", "Bahia", "Fortaleza", "Ceará", "Mirassol", "Juventude", "Vitória", "Sport"],
+  brasileira2: ["Coritiba", "Goiás", "Avaí", "Novorizontino", "Chapecoense", "CRB", "Operário-PR", "Athletico-PR", "América-MG", "Cuiabá", "Criciúma", "Atlético-GO", "Ponte Preta", "Botafogo-SP", "Vila Nova", "Paysandu", "Remo", "Volta Redonda", "Athletic Club-MG", "Amazonas"],
+  chilena: ["Colo-Colo", "Universidad de Chile", "Universidad Católica", "Cobreloa"],
+  argentina: ["Boca Juniors", "River Plate", "Racing", "Independiente", "San Lorenzo", "Estudiantes"],
+  outros_sa: ["Outro clube sul-americano"],
+  mls: ["Inter Miami", "LA Galaxy", "LAFC", "Atlanta United", "Seattle Sounders", "NYCFC"],
+  usl: ["Sacramento Republic", "Phoenix Rising", "Indy Eleven", "Louisville City"],
+  outros_na: ["Outro clube norte-americano"],
+  selecoes_na: ["Estados Unidos", "México", "Canadá", "Costa Rica"],
+  coreana: ["Ulsan Hyundai", "Jeonbuk", "FC Seoul", "Pohang Steelers"],
+  j1: ["Vissel Kobe", "Yokohama F. Marinos", "Kawasaki Frontale", "Urawa Reds", "Kashima Antlers"],
+  j2: ["Shimizu S-Pulse", "JEF United", "V-Varen Nagasaki", "Tokushima Vortis", "Blaublitz Akita"],
+  byd: ["Shanghai Port", "Shanghai Shenhua", "Beijing Guoan", "Shandong Taishan"],
+  malaysia: ["Johor Darul Ta'zim", "Selangor", "Kuala Lumpur City", "Sabah"],
+  outros_as: ["Outro clube asiático"],
+  afc_elite: ["Al-Hilal", "Al-Ain", "Yokohama F. Marinos", "Ulsan HD"],
+  afc_two: ["Sharjah FC", "Lion City Sailors", "Tampines Rovers"]
+};
+
+let inscricoesCache = {};
+let db = null;
+let inscricoesRef = null;
+const nomeInput = document.getElementById('nome');
+const ligaSel = document.getElementById('liga');
+const clubeSel = document.getElementById('clube');
+const btnWpp = document.getElementById('enviarWpp');
+const resultado = document.getElementById('resultado');
+const vagasInfo = document.getElementById('vagasInfo');
+const verAdmin = document.getElementById('verAdmin');
+const adminPanel = document.getElementById('adminPanel');
+const listaInscritos = document.getElementById('listaInscritos');
+const btnLimpar = document.getElementById('limpar');
+const btnExportar = document.getElementById('exportar');
+const statusConexao = document.getElementById('statusConexao');
+
+function iniciarApp() {
+  log('Inicializando Firebase...');
+  try {
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzcKLA1vaCc2PRIpJwuAHpGq3K2ZGb9ns",
+      authDomain: "copa-efootball.firebaseapp.com",
+      databaseURL: "https://copa-efootball-default-rtdb.firebaseio.com",
+      projectId: "copa-efootball",
+      storageBucket: "copa-efootball.firebasestorage.app",
+      messagingSenderId: "157666809695",
+      appId: "1:157666809695:web:b120d94e41d3d2713a48ea"
+    };
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    inscricoesRef = db.ref('inscricoes');
+    log('✅ Firebase iniciado! Conectando ao banco...');
+
+    inscricoesRef.on('value', (snapshot) => {
+      inscricoesCache = snapshot.val() || {};
+      const qtd = Object.keys(inscricoesCache).length;
+      log('✅ Conectado! ' + qtd + ' inscrições no banco.');
+      statusConexao.textContent = '🟢 Conectado (' + qtd + ' inscrições)';
+      statusConexao.className = 'status online';
+      // Esconde debug após sucesso
+      setTimeout(() => { document.getElementById('debug').style.display = 'none'; }, 3000);
+      if (ligaSel.value) atualizarClubes();
+      if (adminPanel.classList.contains('show')) mostrarInscricoes();
+    }, (error) => {
+      log('❌ Erro de conexão: ' + error.message);
+      statusConexao.textContent = '🔴 Erro: ' + error.message;
+      statusConexao.className = 'status offline';
+    });
+  } catch (e) {
+    log('❌ Erro ao iniciar: ' + e.message);
+    statusConexao.textContent = '🔴 Erro: ' + e.message;
+    statusConexao.className = 'status offline';
+  }
+}
+
+function getInscricoesArray() {
+  return Object.entries(inscricoesCache).map(([id, dados]) => ({ id, ...dados }));
+}
+function contarInscricoes(clube) {
+  return getInscricoesArray().filter(i => i.clube === clube).length;
+}
+function clubeCheio(clube) {
+  return contarInscricoes(clube) >= LIMITE_POR_CLUBE;
+}
+function validarFormulario() {
+  const nomeOk = nomeInput.value.trim().length >= 2;
+  const ligaOk = ligaSel.value !== '';
+  const clubeOk = clubeSel.value !== '';
+  const naoEstaCheio = clubeOk && !clubeCheio(clubeSel.value);
+  btnWpp.disabled = !(nomeOk && ligaOk && clubeOk && naoEstaCheio);
+}
+function atualizarClubes() {
+  const valor = ligaSel.value;
+  const clubeAtual = clubeSel.value;
+  clubeSel.innerHTML = '';
+  if (!valor) {
+    clubeSel.disabled = true;
+    clubeSel.innerHTML = '<option value="">-- Selecione primeiro uma liga --</option>';
+    vagasInfo.classList.remove('show');
+    validarFormulario();
+    return;
+  }
+  clubeSel.disabled = false;
+  clubeSel.innerHTML = '<option value="">-- Selecione um clube --</option>';
+  clubes[valor].forEach(clube => {
+    const inscritos = contarInscricoes(clube);
+    const cheio = inscritos >= LIMITE_POR_CLUBE;
+    const opt = document.createElement('option');
+    opt.value = clube;
+    opt.textContent = cheio ? clube + ' ❌ (CHEIO)' : clube + ' (' + inscritos + '/' + LIMITE_POR_CLUBE + ')';
+    if (cheio) opt.disabled = true;
+    if (clube === clubeAtual) opt.selected = true;
+    clubeSel.appendChild(opt);
+  });
+  if (clubeAtual) atualizarVagasInfo();
+  validarFormulario();
+}
+function atualizarVagasInfo() {
+  const clube = clubeSel.value;
+  if (!clube) { vagasInfo.classList.remove('show'); return; }
+  const inscritos = contarInscricoes(clube);
+  const vagas = LIMITE_POR_CLUBE - inscritos;
+  if (vagas <= 0) {
+    vagasInfo.textContent = '❌ Clube LOTADO. Escolha outro.';
+    vagasInfo.classList.add('cheio');
+  } else {
+    vagasInfo.textContent = '✅ Restam ' + vagas + ' vagas (' + inscritos + '/' + LIMITE_POR_CLUBE + ')';
+    vagasInfo.classList.remove('cheio');
+  }
+  vagasInfo.classList.add('show');
+}
+
+nomeInput.addEventListener('input', validarFormulario);
+ligaSel.addEventListener('change', () => { resultado.classList.remove('show'); atualizarClubes(); });
+clubeSel.addEventListener('change', () => { atualizarVagasInfo(); validarFormulario(); });
+
+btnWpp.addEventListener('click', () => {
+  const nome = nomeInput.value.trim();
+  const ligaTexto = ligaSel.options[ligaSel.selectedIndex].text;
+  const clubeTexto = clubeSel.value;
+  if (!db) { alert('❌ Sem conexão.'); return; }
+  if (clubeCheio(clubeTexto)) {
+    resultado.innerHTML = '❌ <strong>Clube LOTADO!</strong>';
+    resultado.classList.add('erro'); resultado.classList.add('show');
+    return;
+  }
+  btnWpp.disabled = true;
+  btnWpp.textContent = '⏳ Salvando...';
+  inscricoesRef.push({
+    nome: nome, liga: ligaTexto, clube: clubeTexto,
+    data: new Date().toLocaleString('pt-BR'),
+    timestamp: Date.now()
+  }).then(() => {
+    const inscritos = contarInscricoes(clubeTexto) + 1;
+    const mensagem = '*🆕 Nova inscrição - Copa eFootball!*%0A%0A' +
+      '👤 *Nome:* ' + nome + '%0A' +
+      '🏆 *Liga:* ' + ligaTexto + '%0A' +
+      '⚽ *Clube:* ' + clubeTexto + '%0A' +
+      '📊 *Vaga:* ' + inscritos + '/' + LIMITE_POR_CLUBE;
+    window.open('https://wa.me/' + SEU_WHATSAPP + '?text=' + mensagem, '_blank');
+    resultado.classList.remove('erro');
+    resultado.innerHTML = '✅ <strong>Inscrição enviada!</strong><br><br>' +
+      '👤 Nome: <strong>' + nome + '</strong><br>' +
+      '🏆 Liga: <strong>' + ligaTexto + '</strong><br>' +
+      '⚽ Clube: <strong>' + clubeTexto + '</strong><br>' +
+      '📊 Vaga: <strong>' + inscritos + '/' + LIMITE_POR_CLUBE + '</strong><br><br>' +
+      '📱 <em>Confirme no WhatsApp.</em>';
+    resultado.classList.add('show');
+    nomeInput.value = '';
+    btnWpp.textContent = '📱 Enviar inscrição pelo WhatsApp';
+    validarFormulario();
+  }).catch((e) => {
+    resultado.innerHTML = '❌ Erro: ' + e.message;
+    resultado.classList.add('erro'); resultado.classList.add('show');
+    btnWpp.textContent = '📱 Enviar inscrição pelo WhatsApp';
+    validarFormulario();
+  });
+});
+
+verAdmin.addEventListener('click', () => {
+  if (adminPanel.classList.contains('show')) { adminPanel.classList.remove('show'); return; }
+  const senha = prompt('Digite a senha de admin:');
+  if (senha === SENHA_ADMIN) { mostrarInscricoes(); adminPanel.classList.add('show'); }
+  else if (senha !== null) { alert('❌ Senha incorreta!'); }
+});
+
+function mostrarInscricoes() {
+  const inscricoes = getInscricoesArray().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+  if (inscricoes.length === 0) { listaIns
