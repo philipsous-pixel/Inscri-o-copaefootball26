@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Copa eFootball 🏆</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        h1, h2, h3, .brand { font-family: 'Orbitron', sans-serif; }
+        
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a103c 50%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        
+        .input-glass {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #fff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            width: 100%;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-glass:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+        
+        /* Select custom */
+        select.input-glass {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+        }
+        
+        .gradient-text-animated {
+            background: linear-gradient(90deg, #FFD700, #007BFF, #FF0000, #FF8C00);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 4s ease infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .toast {
+            transform: translateX(120%);
+            transition: transform .35s cubic-bezier(.175,.885,.32,1.275);
+        }
+        .toast.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Fundo -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute w-[350px] h-[350px] bg-blue-600 rounded-full blur-[80px] opacity-40 -top-10 -left-10 animate-pulse"></div>
+        <div class="absolute w-[400px] h-[400px] bg-purple-600 rounded-full blur-[80px] opacity-40 -bottom-10 -right-10" style="animation: pulse 4s infinite"></div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast fixed top-5 right-3 z-50 glass-panel px-5 py-3 rounded-xl border-l-4 border-red-500 flex items-center gap-3 max-w-[85vw]">
+        <i id="toast-icon" class="fas fa-exclamation-circle text-red-400 text-lg"></i>
+        <div>
+            <h4 id="toast-title" class="font-bold text-sm text-white">Atenção</h4>
+            <p id="toast-msg" class="text-xs text-gray-300 mt-0.5">Mensagem</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="w-full glass-panel sticky top-0 z-40 border-b border-white/10">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-gamepad text-2xl text-blue-400"></i>
+                <div>
+                    <h1 class="text-lg md:text-2xl font-black tracking-wider text-white brand">COPA <span class="text-blue-400">EFOOTBALL</span></h1>
+                    <p class="text-[9px] text-blue-200 uppercase tracking-[0.2em]">Temporada 2026</p>
+                </div>
+            </div>
+            <a href="https://www.instagram.com/philipsous?igsh=MTZ3czR4OXVpdDhnaQ==" target="_blank" 
+               class="flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-xs font-bold shadow-lg">
+                <i class="fab fa-instagram"></i>
+                <span class="hidden sm:inline">@philipsous</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-8">
+
+        <!-- Hero -->
+        <section class="text-center space-y-3 py-4">
+            <h2 class="text-2xl md:text-4xl font-black text-white brand">
+                VAGAS <span class="text-blue-400" id="vagas-topo">20/20</span>
+            </h2>
+            <p class="text-gray-300 text-sm max-w-xl mx-auto">
+                Escolha seu clube exclusivo e dispute o título. Cada time só pode ser usado por um jogador.
+            </p>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                Vagas: <span id="vagas-num">20</span>/20
+            </div>
+        </section>
+
+        <!-- Regras -->
+        <section class="glass-panel rounded-2xl p-5 md:p-6 border border-blue-500/20">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-yellow-400 brand">
+                <i class="fas fa-scroll"></i> REGRAS DA COPA
+            </h3>
+            <ul class="space-y-2.5 text-sm text-gray-200">
+                <li class="flex gap-2.5"><i class="fas fa-shield-alt text-blue-400 mt-0.5 text-xs"></i> <span>Não pode ter o mesmo escudo do adversário.</span></li>
+                <li class="flex gap-2.5"><i class="fas fa-hand-paper text-red-400 mt-0.5 text-xs"></i> <span>Não pode quitar durante a partida.</span></li>
+                <li class="flex gap-2.5"><i class="fas fa-camera text-green-400 mt-0.5 text-xs"></i> <span>Prints do resultado obrigatórios.</span></li>
+                <li class="flex gap-2.5"><i class="fas fa-wifi text-purple-400 mt-0.5 text-xs"></i> <span>Problema de internet = partida adiada.</span></li>
+                <li class="flex gap-2.5"><i class="fas fa-users text-yellow-400 mt-0.5 text-xs"></i> <span>Eliminatória só começa quando todos estiverem prontos.</span></li>
+                <li class="flex gap-2.5"><i class="fas fa-clock text-orange-400 mt-0.5 text-xs"></i> <span>Partidas de <strong>15 minutos</strong> e <strong>6 substituições</strong>.</span></li>
+            </ul>
+        </section>
+
+        <!-- Inscrição -->
+        <section class="grid md:grid-cols-5 gap-6">
+            <div class="md:col-span-3 glass-panel rounded-2xl p-5 md:p-6">
+                <h3 class="text-lg font-bold mb-5 flex items-center gap-2 brand">
+                    <i class="fas fa-user-plus text-blue-400"></i> FICHA DE INSCRIÇÃO
+                </h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 mb-1.5 font-bold">Nome do Jogador</label>
+                        <input type="text" id="nome" placeholder="Como quer ser chamado?" maxlength="30" class="input-glass">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 mb-1.5 font-bold">Liga</label>
+                        <select id="liga" class="input-glass">
+                            <option value="" disabled selected>Selecione a liga...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 mb-1.5 font-bold">Clube</label>
+                        <select id="clube" disabled class="input-glass opacity-50">
+                            <option value="" disabled selected>Escolha a liga primeiro</option>
+                        </select>
+                    </div>
+
+                    <button onclick="inscrever()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold tracking-wide shadow-lg active:scale-[0.98] transition-transform flex justify-center items-center gap-2 mt-2">
+                        <i class="fas fa-check-circle"></i> CONFIRMAR INSCRIÇÃO
+                    </button>
+                    
+                    <p id="erro-clube" class="text-red-400 text-xs text-center font-semibold hidden">
+                        <i class="fas fa-times-circle"></i> Erro, este clube já está em uso
+                    </p>
+                </div>
+
+                <div class="mt-5 flex justify-center">
+                    <button onclick="enviarWhatsApp()" type="button" class="inline-flex items-center gap-2 text-green-400 text-sm font-semibold border border-green-500/30 px-5 py-2.5 rounded-lg active:bg-green-500/10 transition">
+                        <i class="fab fa-whatsapp text-lg"></i> Enviar convite WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inscritos -->
+            <div class="md:col-span-2 glass-panel rounded-2xl p-5 h-fit">
+                <h3 class="text-base font-bold mb-3 brand flex items-center gap-2">
+                    <i class="fas fa-list-ol text-purple-400"></i> INSCRITOS (<span id="contador-inscritos">0</span>)
+                </h3>
+                <div id="lista-publica" class="space-y-2 max-h-[350px] overflow-y-auto pr-1">
+                    <p class="text-gray-500 text-xs text-center italic py-4">Nenhum inscrito ainda...</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Admin -->
+    <button onclick="abrirAdmin()" class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-gray-800 border border-gray-600 text-gray-300 active:bg-gray-700 active:text-white transition flex items-center justify-center shadow-xl">
+        <i class="fas fa-lock text-sm"></i>
+    </button>
+
+    <div id="modal-admin" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="fecharAdmin()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass-panel w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl flex flex-col max-h-[85vh]">
+                
+                <div id="admin-login" class="p-6 text-center">
+                    <i class="fas fa-user-shield text-4xl text-blue-400 mb-3"></i>
+                    <h3 class="text-xl font-bold brand mb-1">ÁREA DO ADMIN</h3>
+                    <p class="text-gray-400 text-xs mb-4">Apenas você tem acesso.</p>
+                    <input type="password" id="senha-admin" placeholder="Senha..." class="input-glass text-center max-w-[200px] mx-auto mb-3" onkeydown="if(event.key==='Enter')verificarSenha()">
+                    <br>
+                    <button onclick="verificarSenha()" class="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold shadow-lg">ACESSAR</button>
+                    <p id="erro-senha" class="text-red-400 text-xs mt-2 hidden">Senha incorreta!</p>
+                </div>
+
+                <div id="admin-painel" class="hidden flex-col h-full">
+                    <div class="p-4 border-b border-white/10 flex justify-between items-center">
+                        <h3 class="text-base font-bold brand">GERENCIAR INSCRITOS</h3>
+                        <button onclick="fecharAdmin()" class="text-gray-400"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="p-4 overflow-y-auto flex-1">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 text-gray-300 uppercase">
+                                <tr>
+                                    <th class="px-3 py-2">#</th>
+                                    <th class="px-3 py-2">Jogador</th>
+                                    <th class="px-3 py-2">Clube</th>
+                                    <th class="px-3 py-2 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-admin" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Sucesso -->
+    <div id="modal-sucesso" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="fecharSucesso()"></div>
+        <div class="relative glass-panel max-w-sm w-full rounded-3xl p-6 text-center border border-white/20 shadow-2xl scale-95 opacity-0 transition-all duration-500" id="sucesso-box">
+            <div class="w-16 h-16 mx-auto bg-gradient-to-tr from-yellow-400 via-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/30 mb-4 animate-bounce">
+                <i class="fas fa-trophy text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-black mb-3 gradient-text-animated brand leading-tight">
+                OBRIGADO POR SE INSCREVER NA COPA EFOOTBALL
+            </h3>
+            <p class="text-gray-200 text-sm font-medium">Desejamos boa sorte em busca ao título! 🏆</p>
+            <button onclick="fecharSucesso()" class="mt-6 px-6 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm font-bold active:bg-white/20 transition">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+    <script>
+        // ===== CONFIG FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2aaIQ_m-r18Cdiiwr61PXDt9Y15ORoFI",
+            authDomain: "copa-efootball-2026.firebaseapp.com",
+            databaseURL: "https://copa-efootball-2026-default-rtdb.firebaseio.com",
+            projectId: "copa-efootball-2026",
+            storageBucket: "copa-efootball-2026.firebasestorage.app",
+            messagingSenderId: "374232339265",
+            appId: "1:374232339265:web:848c87d8ba3636d96b87c0"
+        };
+
+        let dbRef = null, modoFirebase = false, inscricoes = [];
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            dbRef = firebase.database().ref('inscricoes');
+            modoFirebase = true;
+        } catch(e) { console.log('Firebase off'); }
+
+        try {
+            const s = localStorage.getItem('copa_efootball_inscricoes');
+            if(s) inscricoes = JSON.parse(s);
+        } catch(e){}
+
+        // ===== DADOS =====
+        const DADOS = {
+            "Scottish Premiership": ["Celtic","Rangers","Aberdeen","Hearts","Hibernian","Dundee United","Motherwell","Kilmarnock","St Johnstone","Ross County","St Mirren","Livingston"],
+            "Liga dinamarquesa": ["FC Copenhagen","Brøndby","FC Midtjylland","AGF Aarhus","OB","FC Nordsjælland","Randers","Silkeborg","Viborg","Lyngby"],
+            "VriendenLoterij Eredivisie": ["Ajax","PSV","Feyenoord","AZ Alkmaar","Twente","Vitesse","Utrecht","Heerenveen","NEC","Sparta Rotterdam","RKC Waalwijk","Go Ahead Eagles","Fortuna Sittard","Volendam","Excelsior","Almere City","Heracles","PEC Zwolle"],
+            "Liga inglesa": ["Arsenal","Aston Villa","Brentford","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Fulham","Liverpool","Luton Town","Man City","Man United","Newcastle","Nottm Forest","Sheffield Utd","Tottenham","West Ham","Wolves","Bournemouth"],
+            "2ª divisão inglesa": ["Leicester","Leeds","Southampton","Ipswich","Sunderland","West Brom","Norwich","Watford","Middlesbrough","Coventry","Bristol City","Preston","Hull","Stoke","Blackburn","Swansea","Millwall","QPR","Birmingham","Cardiff","Plymouth","Huddersfield","Sheff Wed","Rotherham"],
+            "Liga belga": ["Club Brugge","Anderlecht","Genk","Union SG","Antwerp","Gent","Standard Liège","Charleroi","Cercle Brugge","Mechelen"],
+            "Ligue 1 McDonald's": ["PSG","Marseille","Lyon","Monaco","Lille","Rennes","Nice","Lens","Strasbourg","Nantes","Montpellier","Reims","Brest","Toulouse","Le Havre","Metz","Clermont","Lorient"],
+            "Ligue 2 BKT": ["Saint-Étienne","Auxerre","Angers","Rodez","Paris FC","Caen","Guingamp","Laval","Ajaccio","Pau","Bastia","Amiens","Valenciennes","Grenoble","Quevilly-Rouen","Annecy","Dunkerque","Troyes","Concarneau","Estoril"],
+            "Liga suíça": ["Young Boys","Basel","Servette","Zurich","Lugano","St. Gallen","Luzern","Grasshopper","Sion","Winterthur"],
+            "Liga italiana": ["Inter","Milan","Juventus","Napoli","Roma","Lazio","Atalanta","Fiorentina","Bologna","Torino","Monza","Genoa","Sassuolo","Udinese","Empoli","Lecce","Verona","Cagliari","Frosinone","Salernitana"],
+            "2ª divisão italiana": ["Parma","Venezia","Como","Sampdoria","Cremonese","Catanzaro","Palermo","Brescia","Pisa","Modena","Südtirol","Ternana","Bari","Reggiana","Lecco","Spezia","Feralpisalò"],
+            "Liga espanhola": ["Real Madrid","Barcelona","Atletico Madrid","Sevilla","Real Sociedad","Betis","Villarreal","Athletic Bilbao","Valencia","Celta Vigo","Getafe","Osasuna","Rayo Vallecano","Mallorca","Las Palmas","Almería","Granada","Cadiz"],
+            "2ª divisão espanhola": ["Leganés","Real Zaragoza","Eibar","Espanyol","Sporting Gijón","Levante","Albacete","Burgos","Racing Ferrol","Mirandés","Tenerife","Real Oviedo","Huesca","Eldense","Valladolid","Andorra","Amorebieta","Racing Santander"],
+            "Trendyol Süper Lig": ["Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Başakşehir","Konyaspor","Adana Demirspor","Alanyaspor","Antalyaspor","Gaziantep","Sivasspor","Kasımpaşa","Ankaragücü","Rizespor","Hatayspor","Karagümrük","Pendikspor","Samsunspor","İstanbulspor"],
+            "Liga Portugal Betclic": ["Benfica","Porto","Sporting CP","Braga","Vitória Guimarães","Famalicão","Casa Pia","Boavista","Arouca","Vizela","Rio Ave","Gil Vicente","Estoril","Portimonense","Chaves","Estrela da Amadora","Farense","Moreirense"],
+            "Outros (UEFA)": ["RB Salzburg","Dinamo Zagreb","Olympiacos","Slavia Praga","Shakhtar Donetsk","Sparta Praga","Ferencváros","Qarabağ","Sheriff Tiraspol"],
+            "Seleções (UEFA)": ["Alemanha","França","Espanha","Portugal","Inglaterra","Itália","Holanda","Bélgica","Croácia","Polônia","Dinamarca","Suíça","Áustria","Turquia","Ucrânia","Sérvia"],
+            "Liga colombiana": ["Millonarios","Nacional","América de Cali","Deportivo Cali","Junior","Santa Fe","Tolima","Once Caldas","Pereira","Águilas Doradas","Bucaramanga","Pasto","Medellín","Envigado","Jaguares","Patriotas","Unión Magdalena","Alianza Petrolera"],
+            "Brasileirão Betano": ["Flamengo","Palmeiras","Botafogo","Atlético-MG","Grêmio","Fluminense","São Paulo","Internacional","Corinthians","Athletico-PR","Cruzeiro","Red Bull Bragantino","Fortaleza","Bahia","Vasco da Gama","Cuiabá","Juventude","Mirassol","Atlético-GO","Santos"],
+            "2ª divisão brasileira": ["Sport","Vila Nova","Criciúma","Novorizontino","Guarani","Avaí","Goiás","Coritiba","CRB","Ponte Preta","Operário","Paysandu","Amazonas","Ituano","Chapecoense","Botafogo-SP","Brusque","Ferroviária","Remo","Volta Red
